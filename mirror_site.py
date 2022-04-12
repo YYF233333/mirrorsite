@@ -67,9 +67,6 @@ if __name__ == "__main__":
     if not os.path.exists("./icourse.club/course"):
         os.makedirs("./icourse.club/course")
 
-    env = os.environ.copy()
-    env["RUST_LOG"] = "info"
-    env["RUST_LOG_STYLE"] = "always"
     if os.path.exists("./mirrorsite"):
         subprocess.run(
             [
@@ -79,7 +76,7 @@ if __name__ == "__main__":
                 "-n={}".format(args.n if args.n is not None else 5),
             ],
             check=True,
-            env=env,
+            env=os.environ.copy(),
         )
     elif os.path.exists("./target/release/mirrorsite"):
         subprocess.run(
@@ -93,7 +90,7 @@ if __name__ == "__main__":
                 "-n={}".format(args.n if args.n is not None else 5),
             ],
             check=True,
-            env=env,
+            env=os.environ.copy(),
         )
     else:
         raise Exception("Cannot find mirrorsite binary")

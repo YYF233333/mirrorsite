@@ -11,10 +11,17 @@ use std::{
 
 #[macro_use]
 extern crate log;
+use env_logger::WriteStyle;
+use log::LevelFilter;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    env_logger::init();
+    env_logger::builder()
+        .parse_default_env()
+        .filter_level(LevelFilter::Info)
+        .format_timestamp(None)
+        .write_style(WriteStyle::Always)
+        .init();
     let args = clap::Command::new("mirrorsite")
         .arg(
             Arg::new("threads")
