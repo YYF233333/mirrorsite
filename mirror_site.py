@@ -69,6 +69,7 @@ if __name__ == "__main__":
 
     env = os.environ.copy()
     env["RUST_LOG"] = "info"
+    env["RUST_LOG_STYLE"] = "always"
     if os.path.exists("./mirrorsite"):
         subprocess.run(
             [
