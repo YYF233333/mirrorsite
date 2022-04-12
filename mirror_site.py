@@ -25,7 +25,7 @@ def convert_links(n_thread: int):
 
 def convert_images(n_thread: int):
     workload = filter(
-        lambda file: path.splitext(file[1])[1] != ".webp",
+        lambda file: not file.endswith(".webp"),
         reduce(
             chain,
             map(
