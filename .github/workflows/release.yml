@@ -1,15 +1,10 @@
-name: Rust
+name: Release
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  
-  workflow_dispatch:
-
-env:
-  CARGO_TERM_COLOR: always
 
 jobs:
   build:
@@ -19,13 +14,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: cargo build --verbose
+      run: cargo build --release
     
     - name: Create release
-      uses: ncipollo/release-action@v1
+      uses: xresloader/upload-to-github-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        artifacts: "target/release/mirrorsite"
-        artifactErrorsFailBuild: true
-        omitBody: true
-        token: ${{ secrets.GITHUB_TOKEN }}
+        file: "target/release/mirrorsite"
+        overwrite: true
+        update_latest_release: true
 
