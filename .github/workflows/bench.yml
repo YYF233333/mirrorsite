@@ -7,6 +7,7 @@ on:
       - 'src/*'
       - 'Cargo.lock'
       - 'Cargo.toml'
+      - '.github/workflows/bench.yml'
   pull_request:
     branches: [ main ]
 
