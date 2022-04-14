@@ -14,8 +14,9 @@ extern crate log;
 use env_logger::WriteStyle;
 use log::LevelFilter;
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+use tokio::runtime;
+
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     env_logger::builder()
         .parse_default_env()
         .filter_level(LevelFilter::Info)
@@ -50,12 +51,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
+    let runtime = runtime::Builder::new_multi_thread()
+        .enable_all()
+        .max_blocking_threads(threads)
+        .build()?;
+
     let client = Client::new();
-    stream::iter(min_page..=max_page)
-        .map(|page| download(&client, page))
-        .buffered(threads)
-        .collect::<Vec<_>>()
-        .await;
+    runtime.block_on(async move {
+        stream::iter(min_page..=max_page)
+            .map(|page| download(&client, page))
+            .buffered(threads)
+            .collect::<Vec<_>>()
+            .await;
+    });
 
     Ok(())
 }
