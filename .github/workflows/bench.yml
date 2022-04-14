@@ -21,7 +21,10 @@ jobs:
         fetch-depth: 0
 
     - name: Configure environment
-      run: git config --global user.name GitHub_Action
+      run: |
+        git config --global user.name GitHub_Action
+        # shutdown protect
+        sudo sysctl -w kernel.perf_event_paranoid=-1
     
     - name: Merge main update
       run: |
