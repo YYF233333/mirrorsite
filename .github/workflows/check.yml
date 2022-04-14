@@ -28,4 +28,7 @@ jobs:
       run: |
         cargo build
         cargo test
+    
+    - name: Real test
+      run: cargo run -- --max=5 -n 10
 
