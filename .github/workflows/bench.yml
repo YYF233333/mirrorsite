@@ -28,8 +28,6 @@ jobs:
     - name: Configure environment
       run: |
         git config --global user.name GitHub_Action
-        # shutdown protect
-        sudo sysctl -w kernel.perf_event_paranoid=2
     
     - name: Merge main update
       run: |
@@ -40,7 +38,7 @@ jobs:
     - name: Bench
       run: |
         cargo install flamegraph
-        cargo flamegraph -- --max=50 -n 10
+        sudo cargo flamegraph -- --max=50 -n 10
     
     - name: Store result
       run: |
