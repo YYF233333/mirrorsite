@@ -3,6 +3,10 @@ name: Benchmark
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'src/*'
+      - 'Cargo.lock'
+      - 'Cargo.toml'
   pull_request:
     branches: [ main ]
 
@@ -24,7 +28,7 @@ jobs:
       run: |
         git config --global user.name GitHub_Action
         # shutdown protect
-        sudo sysctl -w kernel.perf_event_paranoid=-1
+        sudo sysctl -w kernel.perf_event_paranoid=2
     
     - name: Merge main update
       run: |
