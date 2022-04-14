@@ -37,7 +37,7 @@ jobs:
 
     - name: Bench
       run: |
-        cargo install flamegraph
+        sudo cargo install flamegraph
         sudo cargo flamegraph -- --max=50 -n 10
     
     - name: Store result
