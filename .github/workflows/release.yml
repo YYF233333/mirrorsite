@@ -1,15 +1,9 @@
 name: Release
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'src/*'
-      - 'Cargo.lock'
-      - 'Cargo.toml'
-      - '.github/workflows/release.yml'
-  pull_request:
-    branches: [ main ]
+  workflow_run:
+    workflows: [Check]
+    types: [completed]
 
 env:
   CARGO_TERM_COLOR: always
@@ -18,7 +12,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
     - uses: actions/checkout@v3
     
