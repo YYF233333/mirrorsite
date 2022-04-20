@@ -1,5 +1,6 @@
 #!/bin/python3
 import os
+from unicodedata import name
 from PIL import Image
 from bs4 import BeautifulSoup
 import minify_html
@@ -42,7 +43,7 @@ def convert_link(path: str):
         for tag in soup.select('a[href^="/"]'):
             tag["href"] = "https://icourse.club" + tag["href"]
         # redirect image src to local files
-        for img in soup.select('img[href^="/uploads/images"]'):
+        for img in soup.select('img[src^="/uploads/images"]'):
             img["src"] = "../.." + img["src"].split(".")[0] + ".webp"
         # remove javascripts to reduce file size
         for script in soup.find_all("script"):
@@ -51,3 +52,18 @@ def convert_link(path: str):
     # compress text to reduce size
     with open(path, "w") as file:
         file.write(minify_html.minify(str(soup), remove_processing_instructions=True))
+
+def remove_template(path: str):
+    print(f"try remove template in {path}")
+    with open(path, "r", encoding="utf-8") as file:
+        soup = BeautifulSoup(file, features="lxml")
+        if soup.head: soup.head.decompose()
+        nav = soup.find("nav")
+        if nav: nav.decompose()
+        for signin in soup.select('#signin, #footer'):
+            signin.decompose()
+    
+    # compress text to reduce size
+    with open(path, "w") as file:
+        file.write(minify_html.minify(str(soup), remove_processing_instructions=True))
+
