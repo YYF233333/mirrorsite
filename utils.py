@@ -48,9 +48,11 @@ def convert_link(path: str):
         # remove javascripts to reduce file size
         for script in soup.find_all("script"):
             script.decompose()
+        for signin in soup.select('div[id="signin"]'):
+            signin.decompose()
 
     # compress text to reduce size
-    with open(path, "w") as file:
+    with open(path, "w", encoding="utf-8") as file:
         file.write(minify_html.minify(str(soup), remove_processing_instructions=True))
 
 def remove_template(path: str):
