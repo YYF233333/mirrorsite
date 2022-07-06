@@ -7,7 +7,7 @@ import argparse
 from functools import reduce
 from itertools import chain
 from multiprocessing import Pool
-from utils import convert_link, convert_image, remove_template
+from utils import convert_link, convert_image
 
 
 def convert_links(n_thread: int):
@@ -21,18 +21,6 @@ def convert_links(n_thread: int):
 
     with Pool(n_thread) as p:
         p.map(convert_link, workload)
-
-def remove_templates(n_thread: int):
-    workload = reduce(
-        chain,
-        map(
-            lambda walk: map(lambda file: path.join(walk[0], file), walk[2]),
-            os.walk("./icourse.club/course"),
-        ),
-    )
-
-    with Pool(n_thread) as p:
-        p.map(remove_template, workload)
 
 
 def convert_images(n_thread: int):
@@ -67,12 +55,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "--convert-images",
         help="convert images downloaded to webp",
-        action="store_const",
-        const=True,
-    )
-    parser.add_argument(
-        "--remove-templates",
-        help="remove template part of html",
         action="store_const",
         const=True,
     )
@@ -118,6 +100,3 @@ if __name__ == "__main__":
 
     if args.convert_images:
         convert_images(cpu_count())
-
-    if args.remove_templates:
-        remove_templates(cpu_count())
